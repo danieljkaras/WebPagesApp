@@ -1,0 +1,4 @@
+com\daniel\model\WebPage.class
+com\daniel\dao\WebPagesDao.class
+com\daniel\main\WebPagesService.class
+com\daniel\main\WebPagesRestApp.class

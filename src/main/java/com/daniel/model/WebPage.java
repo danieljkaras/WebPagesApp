@@ -27,15 +27,11 @@ public class WebPage {
     private Long id;
 
     @NotNull
-    @Column(name = "url_info")
-    private String urlInfo;
+    @Column(name = "url")
+    private String url;
 
-    @Column(name = "url_content")
-    private char[] urlContent;
-
-    @Column(name = "addition_date")
-    @NotNull
-    private LocalDate additionDate;
+    @Column(name = "content", length = 10000000)
+    private String content;
 
     public WebPage() {
     }
@@ -48,61 +44,49 @@ public class WebPage {
         this.id = id;
     }
 
-    public String getUrlInfo() {
-        return urlInfo;
+    public String getUrl() {
+        return url;
     }
 
-    public void setUrlInfo(String urlInfo) {
-        this.urlInfo = urlInfo;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
-    public char[] getUrlContent() {
-        return urlContent;
-    }
-
-    public void setUrlContent(char[] urlContent) throws IOException {
-        this.urlContent = getWebSiteContent(getUrlInfo());
-    }
-
-    public LocalDate getAdditionDate() {
-        return additionDate;
-    }
-
-    public void setAdditionDate(LocalDate additionDate) {
-        this.additionDate = additionDate;
+    public String getContent() {
+        return content;
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("WebPage{");
         sb.append("id=").append(id);
-        sb.append(", urlInfo='").append(urlInfo).append('\'');
-        sb.append(", urlContent=").append(Arrays.toString(urlContent));
-        sb.append(", additionDate=").append(additionDate);
+        sb.append(", url='").append(url).append('\'');
+        sb.append(", content='").append(content).append('\'');
         sb.append('}');
         return sb.toString();
     }
 
-    private synchronized char[] getWebSiteContent(String url) throws IOException {
+    public synchronized String downloadContent() throws IOException {
 
-        URL urlAdddres = new URL(url);
+        URL urlAdddres = new URL(this.url);
 
         URLConnection connection = urlAdddres.openConnection();
         InputStream stream = connection.getInputStream();
 
         StringBuilder builder = new StringBuilder();
-        char[] webSiteContent;
+        String webSiteContent;
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(stream))) {
             String line = null;
             while ((line = br.readLine()) != null) {
                 builder.append(line);
             }
-        } catch (MalformedURLException e){
-            //dodaj tutaj logowanie na konsole
+        } catch (MalformedURLException e) {
             throw new MalformedURLException("URL is malformed!!!");
         }
-        webSiteContent = builder.toString().toCharArray();
+        webSiteContent = builder.toString();
+
+        this.content = webSiteContent;
         return webSiteContent;
     }
 }

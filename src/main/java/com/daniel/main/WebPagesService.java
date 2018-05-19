@@ -3,57 +3,70 @@ package com.daniel.main;
 
 import com.daniel.dao.WebPagesDao;
 import com.daniel.model.WebPage;
-import org.hibernate.annotations.MetaValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.time.LocalDate;
-import java.util.List;
 
 
 @Path("/pages")
-
 public class WebPagesService {
 
     @EJB
     private WebPagesDao webPagesDao;
 
+    private Logger logger = LoggerFactory.getLogger(getClass().getName());
+
     @GET
-    @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public WebPage getWebPage(@PathParam("id") Long id) {
-        return webPagesDao.findById(id);
+    @Path("/{url}")
+    @Produces(MediaType.TEXT_HTML)
+    public String getWebPagebyUrl(@PathParam("url") String url) {
+        return webPagesDao.findByUrl(url).toString();
     }
 
     @GET
-    @Path("/all")
-    public List<WebPage> getAllRecords() {
-        return webPagesDao.findAll();
-    }
-
-    @GET
-    @Path("/test")
-    public Response webPagesList() {
-
-        return Response.ok("Lista wszystkich dodanych url " + "+ coś tam jeszcze + w końcu udało się wszystko skonfigurować. ").build();
-    }
-
-    @GET
-    @Path("/getUserAgent")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getAgent(@HeaderParam("user-agent") String userAgent) {
-
-        return Response.ok("You are using: [ " + userAgent + "]").build();
+    @Path("/id/{id}")
+    @Produces(MediaType.TEXT_HTML)
+    public String getWebPageById(@PathParam("id") Long id) {
+        return webPagesDao.findById(id).getContent();
     }
 
     @GET
     @Path("/getAllUrls")
-    public List<String> getAllUrls() {
-        return webPagesDao.findAllUrls();
+    @Produces(MediaType.TEXT_HTML)
+    public String getAllUrls() {
+        logger.info("All url's from database was loaded with success", logger.getName());
+        return webPagesDao.findAllUrls().toString();
     }
 
+    @GET
+    @Path("/like/{like}")
+    @Produces(MediaType.TEXT_HTML)
+    public String getWebPageByLikeValue(@PathParam("like") String like) {
+        logger.info("Content was found with success.   |||" + logger.getName());
+        return webPagesDao.findByValueContent(like).toString();
+    }
+
+    @PUT
+    @Path("/{url}")
+    public Response addToDataBase(@PathParam("url") String url) {
+        WebPage webPage = new WebPage();
+        webPage.setUrl(url);
+        DownloadQueue.getInstance().enqueue(webPage, webPagesDao);
+        logger.info("Web page is insert correct to database via PUT METHOD. :)", logger.getName());
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/addPage/{url}")
+    public Response addPostToDataBase(@PathParam("url") String url) {
+        WebPage webPage = new WebPage();
+        webPage.setUrl(url);
+        DownloadQueue.getInstance().enqueue(webPage, webPagesDao);
+        logger.info("Web page is insert correct to database via POST METHOD. :)", logger.getName());
+        return Response.ok().build();
+    }
 }
