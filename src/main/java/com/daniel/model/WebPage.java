@@ -1,19 +1,14 @@
 package com.daniel.model;
 
-import javax.json.JsonObject;
 import javax.persistence.*;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.Consumes;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.time.LocalDate;
-import java.util.Arrays;
 
 @Entity
 @Transactional
@@ -66,7 +61,7 @@ public class WebPage {
         return sb.toString();
     }
 
-    public synchronized String downloadContent() throws IOException {
+    public String downloadContent() throws IOException {
 
         URL urlAdddres = new URL(this.url);
 
@@ -76,14 +71,12 @@ public class WebPage {
         StringBuilder builder = new StringBuilder();
         String webSiteContent;
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(stream))) {
+        BufferedReader br = new BufferedReader(new InputStreamReader(stream));
             String line = null;
             while ((line = br.readLine()) != null) {
                 builder.append(line);
             }
-        } catch (MalformedURLException e) {
-            throw new MalformedURLException("URL is malformed!!!");
-        }
+
         webSiteContent = builder.toString();
 
         this.content = webSiteContent;

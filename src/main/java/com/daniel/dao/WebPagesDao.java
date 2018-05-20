@@ -21,7 +21,6 @@ public class WebPagesDao {
         return page.getId();
     }
 
-
     public WebPage update(WebPage page) {
         return entityManager.merge(page);
     }
@@ -33,10 +32,11 @@ public class WebPagesDao {
         }
     }
 
-    public List<WebPage> findByUrl(String url) {
-        final TypedQuery<WebPage> query = entityManager.createQuery("SELECT s FROM WebPage s WHERE s.url = :url", WebPage.class);
+    public WebPage findByUrl(String url) {
+        final TypedQuery<WebPage> query = entityManager.createQuery("SELECT s FROM WebPage s WHERE s.url = :url ORDER BY s.id DESC", WebPage.class);
         query.setParameter("url", url);
-        return query.getResultList();
+        query.setMaxResults(1);
+        return query.getSingleResult();
     }
 
     public WebPage findById(Long id) {

@@ -1,6 +1,5 @@
 package com.daniel.main;
 
-
 import com.daniel.dao.WebPagesDao;
 import com.daniel.model.WebPage;
 import org.slf4j.Logger;
@@ -21,10 +20,10 @@ public class WebPagesService {
     private Logger logger = LoggerFactory.getLogger(getClass().getName());
 
     @GET
-    @Path("/{url}")
+    @Path("/url/{url}")
     @Produces(MediaType.TEXT_HTML)
     public String getWebPagebyUrl(@PathParam("url") String url) {
-        return webPagesDao.findByUrl(url).toString();
+        return webPagesDao.findByUrl(url).getContent();
     }
 
     @GET
@@ -38,16 +37,18 @@ public class WebPagesService {
     @Path("/getAllUrls")
     @Produces(MediaType.TEXT_HTML)
     public String getAllUrls() {
+        String queryResult = webPagesDao.findAllUrls().toString();
         logger.info("All url's from database was loaded with success", logger.getName());
-        return webPagesDao.findAllUrls().toString();
+        return queryResult;
     }
 
     @GET
     @Path("/like/{like}")
     @Produces(MediaType.TEXT_HTML)
     public String getWebPageByLikeValue(@PathParam("like") String like) {
-        logger.info("Content was found with success.   |||" + logger.getName());
-        return webPagesDao.findByValueContent(like).toString();
+        String queryLikeResult = webPagesDao.findByValueContent(like).toString();
+        logger.info("Content was found with success." + logger.getName());
+        return queryLikeResult;
     }
 
     @PUT
@@ -56,17 +57,7 @@ public class WebPagesService {
         WebPage webPage = new WebPage();
         webPage.setUrl(url);
         DownloadQueue.getInstance().enqueue(webPage, webPagesDao);
-        logger.info("Web page is insert correct to database via PUT METHOD. :)", logger.getName());
-        return Response.ok().build();
-    }
-
-    @POST
-    @Path("/addPage/{url}")
-    public Response addPostToDataBase(@PathParam("url") String url) {
-        WebPage webPage = new WebPage();
-        webPage.setUrl(url);
-        DownloadQueue.getInstance().enqueue(webPage, webPagesDao);
-        logger.info("Web page is insert correct to database via POST METHOD. :)", logger.getName());
+        logger.info("Web page URL enqueued for download and database persistance.", logger.getName());
         return Response.ok().build();
     }
 }

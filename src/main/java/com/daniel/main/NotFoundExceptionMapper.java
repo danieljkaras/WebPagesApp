@@ -8,6 +8,6 @@ import javax.ws.rs.ext.Provider;
 public class NotFoundExceptionMapper implements ExceptionMapper<Throwable> {
     @Override
     public Response toResponse(Throwable exception) {
-        return Response.status(Response.Status.NOT_FOUND).entity("Resource could not be found. !!! ").build();
+        return Response.status(Response.Status.NOT_FOUND).entity("Resource could not be found.").build();
     }
 }

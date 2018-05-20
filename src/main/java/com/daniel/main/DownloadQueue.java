@@ -22,15 +22,17 @@ public class DownloadQueue {
         executorService.submit(() -> {
             try {
                 page.downloadContent();
-                logger.info("Website content was downloaded correct.");
+                logger.info("Website content was downloaded correctly.");
             } catch (IOException e) {
-                logger.error("Website  pushed to query is not exist. ", e.getMessage());
+                logger.error("Website  pushed to query does not exist. ");
             }
             webPagesDao.save(page);
-            logger.info("WebPage is save to database succesfully.");
+            logger.info("WebPage is saved to database successfully.");
+            logger.info("Executor service task is done");
             return page;
         });
     }
+
     public static DownloadQueue getInstance() {
         return INSTANCE;
     }
