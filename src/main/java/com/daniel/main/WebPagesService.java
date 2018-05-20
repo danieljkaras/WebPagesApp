@@ -10,7 +10,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-
 @Path("/pages")
 public class WebPagesService {
 
@@ -34,11 +33,11 @@ public class WebPagesService {
     }
 
     @GET
-    @Path("/getAllUrls")
+    @Path("/url-all")
     @Produces(MediaType.TEXT_HTML)
     public String getAllUrls() {
         String queryResult = webPagesDao.findAllUrls().toString();
-        logger.info("All url's from database was loaded with success", logger.getName());
+        logger.info("All url's from database was loaded with success" + logger.getName());
         return queryResult;
     }
 
