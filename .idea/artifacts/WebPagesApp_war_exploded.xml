@@ -20,6 +20,7 @@
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.4" />
           <element id="library" level="project" name="Maven: org.slf4j:slf4j-simple:1.7.25" />
           <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.25" />
+          <element id="library" level="project" name="Maven: org.jsoup:jsoup:1.11.3" />
         </element>
       </element>
       <element id="directory" name="META-INF">

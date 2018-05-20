@@ -1,17 +1,12 @@
 package com.daniel.model;
 
+import org.jsoup.Jsoup;
+
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
 
 @Entity
-@Transactional
 
 @Table(name = "WEB_PAGE")
 public class WebPage {
@@ -61,26 +56,10 @@ public class WebPage {
         return sb.toString();
     }
 
-    public String downloadContent() throws IOException {
-
-        URL urlAdddres = new URL(this.url);
-
-        URLConnection connection = urlAdddres.openConnection();
-        InputStream stream = connection.getInputStream();
-
-        StringBuilder builder = new StringBuilder();
-        String webSiteContent;
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(stream));
-            String line = null;
-            while ((line = br.readLine()) != null) {
-                builder.append(line);
-            }
-
-        webSiteContent = builder.toString();
-
-        this.content = webSiteContent;
-        return webSiteContent;
+    public String downloadHtmlContent() throws IOException {
+        String htmlContent = Jsoup.connect(this.url).get().html();
+        this.content = htmlContent;
+        return htmlContent;
     }
 }
 
