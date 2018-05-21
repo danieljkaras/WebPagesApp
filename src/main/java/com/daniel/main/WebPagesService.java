@@ -37,7 +37,7 @@ public class WebPagesService {
     @Produces(MediaType.TEXT_HTML)
     public String getAllUrls() {
         String queryResult = webPagesDao.findAllUrls().toString();
-        logger.info("All url's from database was loaded with success" + logger.getName());
+        logger.info("All url's from database was loaded with success |||  " + logger.getName());
         return queryResult;
     }
 
@@ -46,7 +46,7 @@ public class WebPagesService {
     @Produces(MediaType.TEXT_HTML)
     public String getWebPageByLikeValue(@PathParam("like") String like) {
         String queryLikeResult = webPagesDao.findByValueContent(like).toString();
-        logger.info("Content was found with success." + logger.getName());
+        logger.info("Content was found with success. |||  " + logger.getName());
         return queryLikeResult;
     }
 
@@ -56,7 +56,7 @@ public class WebPagesService {
         WebPage webPage = new WebPage();
         webPage.setUrl(url);
         DownloadQueue.getInstance().enqueue(webPage, webPagesDao);
-        logger.info("Web page URL enqueued for download and database persistance.", logger.getName());
+        logger.info("Web page URL enqueued for download and database persistance. |||  " + logger.getName());
         return Response.ok().build();
     }
 }

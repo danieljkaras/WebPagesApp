@@ -56,7 +56,7 @@ public class WebPage {
         return sb.toString();
     }
 
-    public String downloadHtmlContent() throws IOException {
+    public synchronized String downloadHtmlContent() throws IOException {
         String htmlContent = Jsoup.connect(this.url).get().html();
         this.content = htmlContent;
         return htmlContent;

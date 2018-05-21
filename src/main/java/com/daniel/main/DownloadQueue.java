@@ -5,12 +5,10 @@ import com.daniel.model.WebPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ejb.Singleton;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Singleton
 public class DownloadQueue {
 
     private final Logger logger = LoggerFactory.getLogger(getClass().getName());
@@ -26,7 +24,7 @@ public class DownloadQueue {
                 page.downloadHtmlContent();
                 logger.info("Website content was downloaded correctly.");
             } catch (IOException e) {
-                logger.error("Website  pushed to query does not exist. ", e.getMessage());
+                logger.error("Website  pushed to query does not exist. |||  " +  e.getMessage());
                 throw e;
             }
             webPagesDao.save(page);
